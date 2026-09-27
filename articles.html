@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Articles | Health Admin</title>
+<style>
+:root{--primary:#3B62F0;--navy:#0B1B36;--ink:#111827;--grey:#6B7280;--border:#E5E7EB;--bg:#F8FAFC;--soft:#F1F5F9;--green:#22C55E;--orange:#F97316;--red:#EF4444}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink)}
+button{font:inherit;cursor:pointer}
+.btn{background:var(--primary);color:#fff;border:0;border-radius:24px;padding:10px 18px;font-weight:700;font-size:13px;white-space:nowrap}
+.btn:hover{opacity:.92}
+.btn-l{background:#fff;color:var(--ink);border:1px solid var(--border);border-radius:24px;padding:10px 18px;font-weight:600;font-size:13px}
+.ic{background:var(--soft);border:0;border-radius:8px;width:30px;height:30px;font-size:14px}
+.ic.del:hover{background:#FEE2E2}
+input,textarea,select{width:100%;padding:11px 12px;border:1px solid var(--border);border-radius:10px;font:inherit;background:var(--bg);outline:none}
+input:focus,textarea:focus,select:focus{border-color:var(--primary)}
+label{display:block;font-size:12.5px;font-weight:600;color:var(--grey);margin:12px 0 5px}
+aside{position:fixed;inset:0 auto 0 0;width:250px;background:var(--navy);color:#fff;padding:18px 14px;display:flex;flex-direction:column;z-index:20;transition:transform .2s;overflow-y:auto}
+.brand{font-size:19px;font-weight:800;padding:6px 10px 18px}
+.nav{display:flex;align-items:center;gap:12px;padding:12px;border-radius:8px;color:#CBD5E1;margin:2px 0;font-size:14.5px;font-weight:500;text-decoration:none}
+.nav:hover{background:rgba(255,255,255,.07)}
+.nav.active{background:var(--primary);color:#fff;font-weight:600}
+.nav span{width:22px;text-align:center}
+.spacer{flex:1;min-height:14px}
+main{margin-left:250px;padding:22px 26px 40px}
+.top{display:flex;align-items:center;gap:12px;padding-bottom:14px;border-bottom:1px solid var(--border);margin-bottom:20px}
+.top h1{font-size:24px;margin:0;flex:1}
+#burger{display:none;background:#fff;border:1px solid var(--border);border-radius:8px;width:38px;height:38px;font-size:18px}
+.who{font-size:13px;color:var(--grey);background:#fff;border:1px solid var(--border);padding:7px 12px;border-radius:10px}
+.card{background:#fff;border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:18px}
+.ch{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.ch b{font-size:16px}.ctl{display:flex;gap:10px;align-items:center;margin-left:auto}.ctl input{width:240px}
+.sum{font-size:13px;color:var(--grey);font-weight:600}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:18px}
+.stat{background:#fff;border:1px solid var(--border);border-radius:12px;padding:18px;text-decoration:none;color:inherit;display:block}
+.stat:hover{border-color:var(--primary)}
+.stat span{font-size:12.5px;color:var(--grey)}.stat b{display:block;font-size:28px;margin-top:6px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:12px 18px;border-bottom:1px solid var(--border);white-space:nowrap}
+th{color:var(--grey);font-size:12.5px;font-weight:700;background:var(--bg)}
+.pid{color:var(--primary);font-weight:600}
+.empty{padding:34px;text-align:center;color:var(--grey)}
+.st{padding:3px 10px;border-radius:20px;font-size:11.5px;font-weight:700}
+.st.g{background:#DCFCE7;color:#15803D}.st.o{background:#FFEDD5;color:#C2410C}.st.r{background:#FEE2E2;color:#B91C1C}.st.b{background:#DBEAFE;color:#1D4ED8}
+.grid2{display:grid;grid-template-columns:300px 1fr;gap:18px;align-items:start}
+.cat{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--border);cursor:pointer}
+.cat:hover{background:var(--soft)}
+.cat.sel{background:rgba(59,98,240,.08);border-left:3px solid var(--primary);padding-left:13px}
+.cat .n{flex:1;font-weight:600;font-size:14px}
+.badge{background:var(--soft);border-radius:20px;padding:2px 9px;font-size:11.5px;font-weight:700;color:var(--grey)}
+.q{padding:16px 18px;border-bottom:1px solid var(--border)}
+.qh{display:flex;gap:10px;align-items:flex-start}.qt{flex:1;font-weight:600;font-size:14.5px}
+.opts{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chip{font-size:12px;padding:4px 10px;border-radius:20px;background:var(--soft)}
+.chip i{font-style:normal;font-weight:700;color:var(--primary);margin-right:5px}
+.form{padding:18px;max-width:560px}
+.modal{position:fixed;inset:0;background:rgba(15,23,42,.5);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
+.modal.open{display:flex}
+.box{background:#fff;border-radius:16px;padding:24px;width:100%;max-width:480px;max-height:92vh;overflow:auto}
+.box h3{margin:0 0 4px}.mf{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:11px 20px;border-radius:10px;font-size:13.5px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:60}
+#toast.show{opacity:1}
+@media(max-width:900px){
+  aside{transform:translateX(-100%)}aside.open{transform:none}
+  main{margin-left:0;padding:16px}#burger{display:block}
+  .grid2,.two{grid-template-columns:1fr}.ctl input{width:100%}.ctl{width:100%}
+}
+</style>
+</head>
+<body>
+<aside id="side">
+  <div class="brand">⚕ Health Admin</div>
+  <a class="nav" href="dashboard.html"><span>▦</span>Dashboard</a><a class="nav" href="users.html"><span>👥</span>Users</a><a class="nav" href="doctors.html"><span>🩺</span>Doctors</a><a class="nav" href="appointments.html"><span>📅</span>Appointments</a><a class="nav" href="assessment.html"><span>📋</span>Assessment</a><a class="nav" href="payments.html"><span>💳</span>Payments</a><a class="nav active" href="articles.html"><span>📰</span>Articles</a><a class="nav" href="settings.html"><span>⚙</span>Settings</a>
+  <div class="spacer"></div>
+  <a class="nav" id="logout" href="index.html"><span>⎋</span>Logout</a>
+</aside>
+<main>
+  <div class="top"><button id="burger">☰</button><h1>Articles</h1><span class="who">👤 user</span></div>
+  <div id="page"></div>
+</main>
+<div class="modal" id="modal"><div class="box">
+  <h3 id="mt"></h3><div id="mb"></div>
+  <div class="mf"><button class="btn-l" id="mc">Cancel</button><button class="btn" id="ms">Save</button></div>
+</div></div>
+<div id="toast"></div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, getDoc, setDoc, onSnapshot, serverTimestamp, writeBatch } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// ---- login guard (demo login: user / 1234) ----
+if (sessionStorage.getItem('adminOK') !== '1') location.replace('index.html');
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBLPn1shABCSTJbIn5PO5fne-LCT5UsyQ8",
+  authDomain: "rara-a10ab.firebaseapp.com",
+  databaseURL: "https://rara-a10ab-default-rtdb.firebaseio.com",
+  projectId: "rara-a10ab",
+  storageBucket: "rara-a10ab.firebasestorage.app",
+  messagingSenderId: "222206847620",
+  appId: "1:222206847620:web:0a2ce5677431108e2fb0d1",
+  measurementId: "G-R0X5Z209FV"
+};
+const app = initializeApp(firebaseConfig);
+try { getAnalytics(app); } catch (e) {}
+const db = getFirestore(app);
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const inr = n => '₹' + Number(n || 0).toLocaleString('en-IN');
+const STATUS = {Paid:'g',Completed:'g',Published:'g',Pending:'o',Draft:'o',Upcoming:'b',Cancelled:'r',Refunded:'r'};
+const byTime = (a,b) => (a.createdAt?.seconds ?? 9e9) - (b.createdAt?.seconds ?? 9e9);
+let tt;
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2600)}
+function openModal(title, html, onSave){
+  $('#mt').textContent = title; $('#mb').innerHTML = html; $('#modal').classList.add('open');
+  $('#ms').onclick = async () => { if (await onSave() !== false) closeModal(); };
+  $('#mc').onclick = closeModal;
+  const f = $('#mb input,#mb textarea'); if (f) f.focus();
+}
+function closeModal(){ $('#modal').classList.remove('open'); }
+$('#modal').addEventListener('mousedown', e => { if (e.target.id === 'modal') closeModal(); });
+$('#burger').onclick = () => $('#side').classList.toggle('open');
+$('#logout').onclick = e => { e.preventDefault(); sessionStorage.removeItem('adminOK'); location.replace('index.html'); };
+const watch = (col, cb) => onSnapshot(collection(db, col),
+  s => cb(s.docs.map(d => ({id:d.id, ...d.data()})).sort(byTime)),
+  e => toast('Firestore: ' + e.message));
+const M = { col:'articles', title:'Articles', one:'article', fields:[
+  {k:'title',l:'Title',req:1},{k:'category',l:'Category'},{k:'author',l:'Author'},
+  {k:'status',l:'Status',t:'select',o:['Published','Draft']},{k:'content',l:'Content',t:'textarea',hide:1}]};
+
+let rows = [], search = '';
+const cols = M.fields.filter(f => !f.hide);
+$('#page').innerHTML = `<div class="card"><div class="ch"><b>${M.title}</b><span class="sum" id="sum"></span>
+  <div class="ctl"><input id="search" placeholder="Search…">${M.noAdd ? '' : `<button class="btn" data-a="add">+ Add ${M.one}</button>`}</div></div>
+  <div class="tw"><table><thead><tr>${M.pid ? '<th>ID</th>' : ''}${cols.map(f => `<th>${f.l}</th>`).join('')}<th></th></tr></thead><tbody id="tbody"></tbody></table></div></div>`;
+$('#search').oninput = e => { search = e.target.value; renderMod(); };
+watch(M.col, r => { rows = r; renderMod(); });
+
+function cell(f, v){
+  if (f.k === 'status') return v ? `<span class="st ${STATUS[v] || 'b'}">${esc(v)}</span>` : '—';
+  if (f.t === 'number') return inr(v);
+  return esc(v || '—');
+}
+function renderMod(){
+  const t = search.trim().toLowerCase();
+  const list = rows.filter(r => !t || M.fields.some(f => String(r[f.k] ?? '').toLowerCase().includes(t)));
+  if (M.sum) $('#sum').textContent = 'Paid total: ' + inr(rows.filter(r => r.status === 'Paid').reduce((s,r) => s + Number(r.amount || 0), 0));
+  $('#tbody').innerHTML = list.length ? list.map(r => `<tr>
+    ${M.pid ? `<td class="pid">PT${esc(r.id.slice(0,6).toUpperCase())}</td>` : ''}
+    ${cols.map(f => `<td>${cell(f, r[f.k])}</td>`).join('')}
+    <td><button class="ic" title="Edit" data-a="edit" data-id="${r.id}">✎</button> <button class="ic del" title="Delete" data-a="del" data-id="${r.id}">🗑</button></td></tr>`).join('')
+    : `<tr><td colspan="${cols.length + 2}" class="empty">No records found</td></tr>`;
+}
+function formModal(rec){
+  const html = M.fields.map(f => {
+    const v = rec?.[f.k] ?? '';
+    const inp = f.t === 'select' ? `<select class="fi" data-k="${f.k}">${f.o.map(o => `<option value="${esc(o)}" ${v === o ? 'selected' : ''}>${esc(o) || '—'}</option>`).join('')}</select>`
+      : f.t === 'textarea' ? `<textarea class="fi" data-k="${f.k}" rows="5">${esc(v)}</textarea>`
+      : `<input class="fi" data-k="${f.k}" type="${f.t || 'text'}" value="${esc(v)}">`;
+    return `<label>${f.l}${f.req ? ' *' : ''}</label>${inp}`;
+  }).join('');
+  openModal((rec ? 'Edit ' : 'Add ') + M.one, html, async () => {
+    const obj = {};
+    for (const f of M.fields) {
+      const v = document.querySelector(`#mb .fi[data-k="${f.k}"]`).value.trim();
+      if (f.req && !v) { toast(`${f.l} is required`); return false; }
+      obj[f.k] = f.t === 'number' ? Number(v || 0) : v;
+    }
+    try {
+      if (rec) await updateDoc(doc(db, M.col, rec.id), obj);
+      else await addDoc(collection(db, M.col), { ...obj, createdAt: serverTimestamp() });
+      toast('Saved');
+    } catch (e) { toast(e.message); return false; }
+  });
+}
+document.addEventListener('click', async e => {
+  const el = e.target.closest('[data-a]'); if (!el) return;
+  const a = el.dataset.a, id = el.dataset.id;
+  if (a === 'add') formModal();
+  else if (a === 'edit') formModal(rows.find(r => r.id === id));
+  else if (a === 'del') {
+    if (!confirm('Delete this record?')) return;
+    try { await deleteDoc(doc(db, M.col, id)); toast('Deleted'); } catch (err) { toast(err.message); }
+  }
+});
+</script>
+</body>
+</html>

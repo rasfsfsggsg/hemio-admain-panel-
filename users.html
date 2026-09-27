@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Users | Health Admin</title>
+<style>
+:root{--primary:#3B62F0;--navy:#0B1B36;--ink:#111827;--grey:#6B7280;--border:#E5E7EB;--bg:#F8FAFC;--soft:#F1F5F9;--green:#22C55E;--orange:#F97316;--red:#EF4444}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink)}
+button{font:inherit;cursor:pointer}
+.btn{background:var(--primary);color:#fff;border:0;border-radius:24px;padding:10px 18px;font-weight:700;font-size:13px;white-space:nowrap}
+.btn:hover{opacity:.92}
+.btn-l{background:#fff;color:var(--ink);border:1px solid var(--border);border-radius:24px;padding:10px 18px;font-weight:600;font-size:13px}
+.btn-g{background:var(--green)}.btn-r{background:var(--red)}
+.ic{background:var(--soft);border:0;border-radius:8px;width:30px;height:30px;font-size:14px}
+.ic.del:hover{background:#FEE2E2}
+input,textarea,select{width:100%;padding:11px 12px;border:1px solid var(--border);border-radius:10px;font:inherit;background:var(--bg);outline:none}
+input:focus,textarea:focus,select:focus{border-color:var(--primary)}
+label{display:block;font-size:12.5px;font-weight:600;color:var(--grey);margin:12px 0 5px}
+aside{position:fixed;inset:0 auto 0 0;width:250px;background:var(--navy);color:#fff;padding:18px 14px;display:flex;flex-direction:column;z-index:20;transition:transform .2s;overflow-y:auto}
+.brand{font-size:19px;font-weight:800;padding:6px 10px 18px}
+.nav{display:flex;align-items:center;gap:12px;padding:12px;border-radius:8px;color:#CBD5E1;margin:2px 0;font-size:14.5px;font-weight:500;text-decoration:none}
+.nav:hover{background:rgba(255,255,255,.07)}
+.nav.active{background:var(--primary);color:#fff;font-weight:600}
+.nav span{width:22px;text-align:center}
+.spacer{flex:1;min-height:14px}
+main{margin-left:250px;padding:22px 26px 40px}
+.top{display:flex;align-items:center;gap:12px;padding-bottom:14px;border-bottom:1px solid var(--border);margin-bottom:20px}
+.top h1{font-size:24px;margin:0;flex:1}
+#burger{display:none;background:#fff;border:1px solid var(--border);border-radius:8px;width:38px;height:38px;font-size:18px}
+.who{font-size:13px;color:var(--grey);background:#fff;border:1px solid var(--border);padding:7px 12px;border-radius:10px}
+.card{background:#fff;border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:18px}
+.ch{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.ch b{font-size:16px}.ctl{display:flex;gap:10px;align-items:center;margin-left:auto}.ctl input{width:240px}
+.sum{font-size:13px;color:var(--grey);font-weight:600}
+.tabs{display:flex;gap:6px;background:var(--soft);border-radius:12px;padding:4px}
+.tab{border:0;background:transparent;padding:8px 16px;border-radius:9px;font-weight:700;font-size:13px;color:var(--grey)}
+.tab.active{background:#fff;color:var(--primary);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:12px 18px;border-bottom:1px solid var(--border);white-space:nowrap}
+th{color:var(--grey);font-size:12.5px;font-weight:700;background:var(--bg)}
+.pid{color:var(--primary);font-weight:600}
+.empty{padding:34px;text-align:center;color:var(--grey)}
+.st{padding:3px 10px;border-radius:20px;font-size:11.5px;font-weight:700}
+.st.g{background:#DCFCE7;color:#15803D}.st.o{background:#FFEDD5;color:#C2410C}.st.r{background:#FEE2E2;color:#B91C1C}.st.b{background:#DBEAFE;color:#1D4ED8}
+tr.clickable{cursor:pointer}
+tr.clickable:hover td{background:var(--soft)}
+.modal{position:fixed;inset:0;background:rgba(15,23,42,.5);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
+.modal.open{display:flex}
+.box{background:#fff;border-radius:16px;padding:24px;width:100%;max-width:480px;max-height:92vh;overflow:auto}
+.box.wide{max-width:760px}
+.box h3{margin:0 0 4px}.mf{display:flex;justify-content:flex-end;gap:10px;margin-top:20px;flex-wrap:wrap}
+.sec{margin-top:18px;padding-top:14px;border-top:1px solid var(--border)}
+.sec:first-of-type{margin-top:8px;padding-top:0;border-top:0}
+.sec h4{margin:0 0 10px;font-size:13px;color:var(--primary);text-transform:uppercase;letter-spacing:.04em}
+.dl{display:grid;grid-template-columns:1fr 1fr;gap:10px 18px}
+.di span{display:block;font-size:11.5px;color:var(--grey);font-weight:600}
+.di b{display:block;font-size:14px;font-weight:600;word-break:break-word}
+.di a{color:var(--primary);font-weight:600;text-decoration:none;font-size:14px}
+.di a:hover{text-decoration:underline}
+.dhead{display:flex;gap:14px;align-items:center;margin-bottom:6px}
+.dhead img{width:64px;height:64px;border-radius:50%;object-fit:cover;background:var(--soft);border:1px solid var(--border)}
+.dhead .nm{font-size:18px;font-weight:800}
+.dhead .sp{color:var(--grey);font-size:13px}
+.supCard{display:none}
+.supCard.show{display:block}
+.supCard .cb{padding:16px 18px}
+.supCard .hint{font-size:12px;color:var(--grey);margin:0 0 4px}
+.supCard .row{display:flex;gap:14px;flex-wrap:wrap}
+.supCard .row>div{flex:1;min-width:220px}
+.supCard .mf{justify-content:flex-start}
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:11px 20px;border-radius:10px;font-size:13.5px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:60}
+#toast.show{opacity:1}
+@media(max-width:900px){
+  aside{transform:translateX(-100%)}aside.open{transform:none}
+  main{margin-left:0;padding:16px}#burger{display:block}
+  .ctl{width:100%;flex-wrap:wrap}.ctl input{width:100%}
+  .dl{grid-template-columns:1fr}
+  .supCard .row{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<aside id="side">
+  <div class="brand">⚕ Health Admin</div>
+  <a class="nav" href="dashboard.html"><span>▦</span>Dashboard</a><a class="nav active" href="users.html"><span>👥</span>Users</a><a class="nav" href="doctors.html"><span>🩺</span>Doctors</a><a class="nav" href="appointments.html"><span>📅</span>Appointments</a><a class="nav" href="assessment.html"><span>📋</span>Assessment</a><a class="nav" href="payments.html"><span>💳</span>Payments</a><a class="nav" href="articles.html"><span>📰</span>Articles</a><a class="nav" href="settings.html"><span>⚙</span>Settings</a>
+  <div class="spacer"></div>
+  <a class="nav" id="logout" href="index.html"><span>⎋</span>Logout</a>
+</aside>
+<main>
+  <div class="top"><button id="burger">☰</button><h1>Users</h1><span class="who">👤 user</span></div>
+
+  <div class="card">
+    <div class="ch">
+      <div class="tabs">
+        <button class="tab active" data-tab="patients">Patients</button>
+        <button class="tab" data-tab="clinicians">Clinicians</button>
+      </div>
+      <span class="sum" id="sum"></span>
+      <div class="ctl">
+        <input id="search" placeholder="Search…">
+        <button class="btn" id="addBtn" data-a="add">+ Add patient</button>
+      </div>
+    </div>
+    <div class="tw"><table><thead id="thead"></thead><tbody id="tbody"></tbody></table></div>
+  </div>
+
+  <!-- Support contact card: only relevant to clinicians, shown just on that tab.
+       Saved to Firestore settings/support, read by the doctor app's
+       "not approved yet" popup so the email/number can be changed from here. -->
+  <div class="card supCard" id="supportCard">
+    <div class="ch"><b>Support Contact for Clinicians</b></div>
+    <div class="cb">
+      <p class="hint">Shown in the doctor app's "Not Approved Yet / Rejected" popup, until the clinician is approved.</p>
+      <div class="row">
+        <div>
+          <label>Support Email</label>
+          <input id="supEmail" type="email" placeholder="support@neohomeo.com">
+        </div>
+        <div>
+          <label>Support Phone</label>
+          <input id="supPhone" type="text" placeholder="+91 98765 43210">
+        </div>
+      </div>
+      <div class="mf"><button class="btn" id="supSave">Save Support Info</button></div>
+    </div>
+  </div>
+</main>
+
+<!-- generic add/edit modal (patients only) -->
+<div class="modal" id="modal"><div class="box">
+  <h3 id="mt"></h3><div id="mb"></div>
+  <div class="mf"><button class="btn-l" id="mc">Cancel</button><button class="btn" id="ms">Save</button></div>
+</div></div>
+
+<!-- clinician detail modal -->
+<div class="modal" id="dmodal"><div class="box wide">
+  <div id="db"></div>
+  <div class="mf">
+    <button class="btn-l" id="dclose">Close</button>
+    <button class="btn btn-r" id="dreject">Reject</button>
+    <button class="btn btn-g" id="dapprove">Approve</button>
+  </div>
+</div></div>
+
+<div id="toast"></div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, getDoc, setDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// ---- login guard (demo login: user / 1234) ----
+if (sessionStorage.getItem('adminOK') !== '1') location.replace('index.html');
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBl8H9fhmGPmOURZTwpw6Alfl-kU16-DAg",
+  authDomain: "vison-ar.firebaseapp.com",
+  databaseURL: "https://vison-ar-default-rtdb.firebaseio.com",
+  projectId: "vison-ar",
+  storageBucket: "vison-ar.firebasestorage.app",
+  messagingSenderId: "799509409132",
+  appId: "1:799509409132:web:cdbb0147a1f0832ba35749",
+  measurementId: "G-Q17C9S1RP0"
+};
+const app = initializeApp(firebaseConfig);
+try { getAnalytics(app); } catch (e) {}
+const db = getFirestore(app);
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const byTime = (a,b) => (a.createdAt?.seconds ?? 9e9) - (b.createdAt?.seconds ?? 9e9);
+const arr = v => Array.isArray(v) && v.length ? v.join(', ') : '—';
+const dt = ts => (ts && typeof ts.toDate === 'function') ? ts.toDate().toLocaleDateString('en-IN') : '—';
+const yn = v => v === true ? 'Yes' : v === false ? 'No' : '—';
+let tt;
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2600)}
+function openModal(title, html, onSave){
+  $('#mt').textContent = title; $('#mb').innerHTML = html; $('#modal').classList.add('open');
+  $('#ms').onclick = async () => { if (await onSave() !== false) closeModal(); };
+  $('#mc').onclick = closeModal;
+  const f = $('#mb input,#mb textarea'); if (f) f.focus();
+}
+function closeModal(){ $('#modal').classList.remove('open'); }
+$('#modal').addEventListener('mousedown', e => { if (e.target.id === 'modal') closeModal(); });
+function closeDetail(){ $('#dmodal').classList.remove('open'); }
+$('#dmodal').addEventListener('mousedown', e => { if (e.target.id === 'dmodal') closeDetail(); });
+$('#dclose').onclick = closeDetail;
+$('#burger').onclick = () => $('#side').classList.toggle('open');
+$('#logout').onclick = e => { e.preventDefault(); sessionStorage.removeItem('adminOK'); location.replace('index.html'); };
+const watch = (col, cb) => onSnapshot(collection(db, col),
+  s => cb(s.docs.map(d => ({id:d.id, ...d.data()})).sort(byTime)),
+  e => toast('Firestore: ' + e.message));
+
+// ---------------- Patients ----------------
+const PATIENT_FIELDS = [
+  {k:'name',l:'Name',req:1},{k:'phone',l:'Mobile'},{k:'email',l:'Email',t:'email'},
+  {k:'gender',l:'Gender',t:'select',o:['','Male','Female','Other']},{k:'city',l:'City'}
+];
+let patients = [];
+watch('users', r => { patients = r; if (activeTab === 'patients') render(); });
+
+// ---------------- Clinicians ----------------
+let clinicians = [];
+watch('clinicians', r => { clinicians = r; if (activeTab === 'clinicians') render(); });
+
+let activeTab = 'patients';
+let search = '';
+
+document.querySelectorAll('.tab').forEach(btn => {
+  btn.onclick = () => {
+    activeTab = btn.dataset.tab;
+    document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b === btn));
+    $('#addBtn').style.display = activeTab === 'patients' ? '' : 'none';
+    $('#supportCard').classList.toggle('show', activeTab === 'clinicians');
+    $('#search').value = ''; search = '';
+    render();
+  };
+});
+$('#search').oninput = e => { search = e.target.value; render(); };
+$('#addBtn').onclick = () => patientModal();
+
+function render(){
+  if (activeTab === 'patients') renderPatients(); else renderClinicians();
+}
+
+function renderPatients(){
+  $('#sum').textContent = patients.length + ' total';
+  $('#thead').innerHTML = `<tr>${PATIENT_FIELDS.map(f=>`<th>${f.l}</th>`).join('')}<th></th></tr>`;
+  const t = search.trim().toLowerCase();
+  const list = patients.filter(r => !t || PATIENT_FIELDS.some(f => String(r[f.k] ?? '').toLowerCase().includes(t)));
+  $('#tbody').innerHTML = list.length ? list.map(r => `<tr>
+    ${PATIENT_FIELDS.map(f => `<td>${esc(r[f.k] || '—')}</td>`).join('')}
+    <td><button class="ic" data-a="edit" data-id="${r.id}">✎</button> <button class="ic del" data-a="del" data-col="users" data-id="${r.id}">🗑</button></td></tr>`).join('')
+    : `<tr><td colspan="${PATIENT_FIELDS.length + 1}" class="empty">No patients found</td></tr>`;
+}
+
+function renderClinicians(){
+  $('#sum').textContent = clinicians.length + ' total · ' + clinicians.filter(c => c.status === 'approved').length + ' approved';
+  $('#thead').innerHTML = `<tr><th>Name</th><th>Mobile</th><th>Email</th><th>Qualification</th><th>Specialization</th><th>Status</th><th></th></tr>`;
+  const t = search.trim().toLowerCase();
+  const list = clinicians.filter(r => !t || ['name','phone','email','qualification','specialization'].some(k => String(r[k] ?? '').toLowerCase().includes(t)));
+  $('#tbody').innerHTML = list.length ? list.map(r => {
+    const stCls = r.status === 'approved' ? 'g' : r.status === 'rejected' ? 'r' : 'o';
+    return `<tr class="clickable" data-a="view" data-id="${r.id}">
+      <td>${esc(r.name || '—')}</td><td>${esc(r.phone || '—')}</td><td>${esc(r.email || '—')}</td>
+      <td>${esc(r.qualification || '—')}</td><td>${esc(r.specialization || '—')}</td>
+      <td><span class="st ${stCls}">${esc(r.status || 'pending')}</span></td>
+      <td><button class="ic del" data-a="del" data-col="clinicians" data-id="${r.id}" onclick="event.stopPropagation()">🗑</button></td></tr>`;
+  }).join('') : `<tr><td colspan="7" class="empty">No clinician applications found</td></tr>`;
+}
+
+function patientModal(rec){
+  const html = PATIENT_FIELDS.map(f => {
+    const v = rec?.[f.k] ?? '';
+    const inp = f.t === 'select' ? `<select class="fi" data-k="${f.k}">${f.o.map(o => `<option value="${esc(o)}" ${v === o ? 'selected' : ''}>${esc(o) || '—'}</option>`).join('')}</select>`
+      : `<input class="fi" data-k="${f.k}" type="${f.t || 'text'}" value="${esc(v)}">`;
+    return `<label>${f.l}${f.req ? ' *' : ''}</label>${inp}`;
+  }).join('');
+  openModal((rec ? 'Edit ' : 'Add ') + 'patient', html, async () => {
+    const obj = {};
+    for (const f of PATIENT_FIELDS) {
+      const v = document.querySelector(`#mb .fi[data-k="${f.k}"]`).value.trim();
+      if (f.req && !v) { toast(`${f.l} is required`); return false; }
+      obj[f.k] = v;
+    }
+    try {
+      if (rec) await updateDoc(doc(db, 'users', rec.id), obj);
+      else await addDoc(collection(db, 'users'), { ...obj, createdAt: serverTimestamp() });
+      toast('Saved');
+    } catch (e) { toast(e.message); return false; }
+  });
+}
+
+function fileLink(url){ return url ? `<a href="${esc(url)}" target="_blank" rel="noopener">View file ↗</a>` : '<b>Not uploaded</b>'; }
+function item(label, valueHtml){ return `<div class="di"><span>${label}</span>${valueHtml}</div>`; }
+function itemText(label, text){ return item(label, `<b>${esc(text ?? '—')}</b>`); }
+
+function clinicianDetail(c){
+  return `
+  <div class="dhead">
+    <img src="${esc(c.profilePhotoUrl || '')}" onerror="this.style.visibility='hidden'">
+    <div><div class="nm">${esc(c.name || 'Unnamed')}</div><div class="sp">${esc(c.qualification || '')}${c.specialization ? ' · ' + esc(c.specialization) : ''}</div></div>
+  </div>
+
+  <div class="sec"><h4>1. Personal Details</h4><div class="dl">
+    ${itemText('Full Name', c.name)}${itemText('Mobile', c.phone)}${itemText('Email', c.email)}
+    ${itemText('Date of Birth', dt(c.dateOfBirth))}${itemText('Gender', c.gender)}${itemText('City', c.city)}${itemText('State', c.state)}
+    ${itemText('Languages Spoken', arr(c.languagesSpoken))}
+  </div></div>
+
+  <div class="sec"><h4>2. Professional Details</h4><div class="dl">
+    ${itemText('Qualification', c.qualification)}${itemText('Specialization / Additional Qualification', c.specialization)}
+    ${itemText('College / Institution', c.college)}${itemText('University', c.university)}
+    ${itemText('Year of Graduation', c.yearOfGraduation)}${itemText('Years of Experience', c.yearsOfExperience)}
+    ${itemText('Current Practice Type', c.currentPracticeType)}${itemText('Current Workplace', c.currentWorkplace)}
+    ${itemText('Areas of Practice', c.areasOfPractice)}${itemText('Patient Groups', arr(c.patientGroups))}
+  </div></div>
+
+  <div class="sec"><h4>3. Professional Registration</h4><div class="dl">
+    ${itemText('Registration Authority', c.registrationAuthority)}${itemText('Registration Number', c.registrationNumber)}
+    ${itemText('Registration State', c.registrationState)}${item('Registration Certificate', fileLink(c.registrationCertificateUrl))}
+  </div></div>
+
+  <div class="sec"><h4>4. Education & Certifications</h4><div class="dl">
+    ${item('Degree Certificate', fileLink(c.degreeCertificateUrl))}${itemText('Additional Qualifications', c.additionalQualifications)}
+    ${item('Certifications / Fellowships', fileLink(c.certificationsFellowshipsUrl))}${item('Other Professional Certificates', fileLink(c.otherCertificatesUrl))}
+  </div></div>
+
+  <div class="sec"><h4>5. Doctor Profile</h4><div class="dl">
+    ${itemText('Professional Bio', c.professionalBio)}${itemText('Areas of Interest', c.areasOfInterest)}
+    ${itemText('Consultation Approach', c.consultationApproach)}${itemText('Languages Available for Consultation', arr(c.consultationLanguages))}
+  </div></div>
+
+  <div class="sec"><h4>6. Consultation Setup</h4><div class="dl">
+    ${itemText('Consultation Mode', arr(c.consultationModes))}${itemText('Consultation Duration', c.consultationDuration)}
+    ${itemText('Initial Fee', c.initialConsultationFee != null ? '₹' + c.initialConsultationFee : '—')}
+    ${itemText('Follow-up Fee', c.followUpConsultationFee != null ? '₹' + c.followUpConsultationFee : '—')}
+  </div></div>
+
+  <div class="sec"><h4>7. Availability</h4><div class="dl">
+    ${itemText('Working Days', arr(c.workingDays))}${itemText('Available Time', (c.availableStartTime || '—') + ' – ' + (c.availableEndTime || '—'))}
+    ${itemText('Break Time', (c.breakStartTime || c.breakEndTime) ? (c.breakStartTime || '—') + ' – ' + (c.breakEndTime || '—') : '—')}
+    ${itemText('Max Patients Per Day', c.maxPatientsPerDay)}
+    ${itemText('Leave / Blocked Dates', Array.isArray(c.blockedDates) && c.blockedDates.length ? c.blockedDates.map(dt).join(', ') : '—')}
+  </div></div>
+
+  <div class="sec"><h4>8. Documents</h4><div class="dl">
+    ${item('ID Proof', fileLink(c.idProofUrl))}${item('Signature', fileLink(c.signatureUrl))}
+  </div></div>
+
+  <div class="sec"><h4>9. Professional Agreement</h4><div class="dl">
+    ${itemText('Accepted Doctor Terms', yn(c.acceptedDoctorTerms))}${itemText('Accepted Consultation Policies', yn(c.acceptedConsultationPolicies))}
+    ${itemText('Accepted Payout Terms', yn(c.acceptedPayoutTerms))}${itemText('Digital Signature', c.digitalSignature)}
+    ${itemText('Applied On', dt(c.createdAt))}${itemText('Current Status', c.status || 'pending')}
+  </div></div>
+  `;
+}
+
+function openClinicianDetail(c){
+  $('#db').innerHTML = clinicianDetail(c);
+  $('#dmodal').classList.add('open');
+  $('#dapprove').onclick = async () => { await setStatus(c.id, 'approved'); closeDetail(); };
+  $('#dreject').onclick = async () => { await setStatus(c.id, 'rejected'); closeDetail(); };
+}
+
+async function setStatus(id, status){
+  try { await updateDoc(doc(db, 'clinicians', id), { status }); toast('Status updated to ' + status); }
+  catch (e) { toast(e.message); }
+}
+
+document.addEventListener('click', async e => {
+  const el = e.target.closest('[data-a]'); if (!el) return;
+  const a = el.dataset.a, id = el.dataset.id, col = el.dataset.col;
+  if (a === 'edit') patientModal(patients.find(r => r.id === id));
+  else if (a === 'view') { const c = clinicians.find(r => r.id === id); if (c) openClinicianDetail(c); }
+  else if (a === 'del') {
+    if (!confirm('Delete this record?')) return;
+    try { await deleteDoc(doc(db, col, id)); toast('Deleted'); } catch (err) { toast(err.message); }
+  }
+});
+
+// ---------------- Support Contact (used by the clinician app popup) ----------------
+const supportRef = doc(db, 'settings', 'support');
+async function loadSupport(){
+  try {
+    const snap = await getDoc(supportRef);
+    if (snap.exists()) {
+      const d = snap.data();
+      $('#supEmail').value = d.email || '';
+      $('#supPhone').value = d.phone || '';
+    }
+  } catch (e) { toast(e.message); }
+}
+loadSupport();
+$('#supSave').onclick = async () => {
+  const email = $('#supEmail').value.trim();
+  const phone = $('#supPhone').value.trim();
+  if (!email && !phone) { toast('Enter an email or phone'); return; }
+  try {
+    await setDoc(supportRef, { email, phone }, { merge: true });
+    toast('Support info updated');
+  } catch (e) { toast(e.message); }
+};
+
+render();
+</script>
+</body>
+</html>

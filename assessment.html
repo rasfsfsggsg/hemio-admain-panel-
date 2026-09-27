@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Assessment | Health Admin</title>
+<style>
+:root{--primary:#3B62F0;--navy:#0B1B36;--ink:#111827;--grey:#6B7280;--border:#E5E7EB;--bg:#F8FAFC;--soft:#F1F5F9;--green:#22C55E;--orange:#F97316;--red:#EF4444}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink)}
+button{font:inherit;cursor:pointer}
+button:disabled{opacity:.5;cursor:not-allowed}
+.btn{background:var(--primary);color:#fff;border:0;border-radius:24px;padding:10px 18px;font-weight:700;font-size:13px;white-space:nowrap}
+.btn:hover:not(:disabled){opacity:.92}
+.btn-l{background:#fff;color:var(--ink);border:1px solid var(--border);border-radius:24px;padding:10px 18px;font-weight:600;font-size:13px}
+.btn-s{padding:6px 12px;font-size:12px}
+.btn-ai{background:linear-gradient(135deg,#8B5CF6,#3B62F0);color:#fff;border:0;border-radius:24px;padding:6px 14px;font-weight:700;font-size:12px}
+.btn-ai:hover:not(:disabled){opacity:.92}
+.ic{background:var(--soft);border:0;border-radius:8px;width:30px;height:30px;font-size:14px}
+.ic.del:hover{background:#FEE2E2}
+input,textarea,select{width:100%;padding:11px 12px;border:1px solid var(--border);border-radius:10px;font:inherit;background:var(--bg);outline:none}
+input:focus,textarea:focus,select:focus{border-color:var(--primary)}
+label{display:block;font-size:12.5px;font-weight:600;color:var(--grey);margin:12px 0 5px}
+aside{position:fixed;inset:0 auto 0 0;width:250px;background:var(--navy);color:#fff;padding:18px 14px;display:flex;flex-direction:column;z-index:20;transition:transform .2s;overflow-y:auto}
+.brand{font-size:19px;font-weight:800;padding:6px 10px 18px}
+.nav{display:flex;align-items:center;gap:12px;padding:12px;border-radius:8px;color:#CBD5E1;margin:2px 0;font-size:14.5px;font-weight:500;text-decoration:none}
+.nav:hover{background:rgba(255,255,255,.07)}
+.nav.active{background:var(--primary);color:#fff;font-weight:600}
+.nav span{width:22px;text-align:center}
+.spacer{flex:1;min-height:14px}
+main{margin-left:250px;padding:22px 26px 40px}
+.top{display:flex;align-items:center;gap:12px;padding-bottom:14px;border-bottom:1px solid var(--border);margin-bottom:20px}
+.top h1{font-size:24px;margin:0;flex:1}
+#burger{display:none;background:#fff;border:1px solid var(--border);border-radius:8px;width:38px;height:38px;font-size:18px}
+.who{font-size:13px;color:var(--grey);background:#fff;border:1px solid var(--border);padding:7px 12px;border-radius:10px}
+.card{background:#fff;border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:18px}
+.ch{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.ch b{font-size:16px}
+.empty{padding:34px;text-align:center;color:var(--grey)}
+.grid2{display:grid;grid-template-columns:320px 1fr;gap:18px;align-items:start}
+.cat{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--border);cursor:pointer}
+.cat:hover{background:var(--soft)}
+.cat.sel{background:rgba(59,98,240,.08);border-left:3px solid var(--primary);padding-left:13px}
+.cat .n{flex:1;font-weight:600;font-size:14px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.badge{background:var(--soft);border-radius:20px;padding:2px 9px;font-size:11.5px;font-weight:700;color:var(--grey)}
+.badge.ok{background:#DCFCE7;color:#15803D}
+.info{padding:14px 18px;border-bottom:1px solid var(--border);background:var(--bg)}
+.info p{margin:0 0 8px;font-size:13.5px;color:var(--grey);line-height:1.5;white-space:pre-wrap}
+.info .st{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11.5px;font-weight:700}
+.st.ok{background:#DCFCE7;color:#15803D}.st.wait{background:#FFEDD5;color:#C2410C}
+.q{padding:16px 18px;border-bottom:1px solid var(--border)}
+.qh{display:flex;gap:10px;align-items:flex-start}.qt{flex:1;font-weight:600;font-size:14.5px}
+.tag{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:20px;margin-left:6px;vertical-align:middle}
+.tag.mcq{background:#DBEAFE;color:#1D4ED8}.tag.text{background:#F3E8FF;color:#7E22CE}
+.tag.ai{background:#EDE9FE;color:#6D28D9}
+.opts{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chip{font-size:12px;padding:4px 10px;border-radius:20px;background:var(--soft)}
+.chip i{font-style:normal;font-weight:700;color:var(--primary);margin-right:5px}
+.orow{display:flex;gap:6px;margin-bottom:8px}
+.qn{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.modal{position:fixed;inset:0;background:rgba(15,23,42,.5);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
+.modal.open{display:flex}
+.box{background:#fff;border-radius:16px;padding:24px;width:100%;max-width:480px;max-height:92vh;overflow:auto}
+.box h3{margin:0 0 4px}.mf{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:11px 20px;border-radius:10px;font-size:13.5px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:60}
+#toast.show{opacity:1}
+@media(max-width:900px){
+  aside{transform:translateX(-100%)}aside.open{transform:none}
+  main{margin-left:0;padding:16px}#burger{display:block}
+  .grid2{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<aside id="side">
+  <div class="brand">⚕ Health Admin</div>
+  <a class="nav" href="dashboard.html"><span>▦</span>Dashboard</a><a class="nav" href="users.html"><span>👥</span>Users</a><a class="nav" href="doctors.html"><span>🩺</span>Doctors</a><a class="nav" href="appointments.html"><span>📅</span>Appointments</a><a class="nav active" href="assessment.html"><span>📋</span>Assessment</a><a class="nav" href="payments.html"><span>💳</span>Payments</a><a class="nav" href="articles.html"><span>📰</span>Articles</a><a class="nav" href="settings.html"><span>⚙</span>Settings</a>
+  <div class="spacer"></div>
+  <a class="nav" id="logout" href="index.html"><span>⎋</span>Logout</a>
+</aside>
+<main>
+  <div class="top"><button id="burger">☰</button><h1>Assessment</h1><span class="who">👤 user</span></div>
+  <div id="page"></div>
+</main>
+<div class="modal" id="modal"><div class="box">
+  <h3 id="mt"></h3><div id="mb"></div>
+  <div class="mf"><button class="btn-l" id="mc">Cancel</button><button class="btn" id="ms">Save</button></div>
+</div></div>
+<div id="toast"></div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, serverTimestamp, writeBatch } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// ---- login guard (demo login: user / 1234) ----
+if (sessionStorage.getItem('adminOK') !== '1') location.replace('index.html');
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBl8H9fhmGPmOURZTwpw6Alfl-kU16-DAg",
+  authDomain: "vison-ar.firebaseapp.com",
+  databaseURL: "https://vison-ar-default-rtdb.firebaseio.com",
+  projectId: "vison-ar",
+  storageBucket: "vison-ar.firebasestorage.app",
+  messagingSenderId: "799509409132",
+  appId: "1:799509409132:web:cdbb0147a1f0832ba35749",
+  measurementId: "G-Q17C9S1RP0"
+};
+const app = initializeApp(firebaseConfig);
+try { getAnalytics(app); } catch (e) {}
+const db = getFirestore(app);
+
+// ---- Gemini (free tier) — get a free key at https://aistudio.google.com/apikey ----
+const GEMINI_API_KEY = "YOUR_GEMINI_API_KEY_HERE";
+const GEMINI_MODEL = "gemini-3.1-flash-lite"; // stable since May 2026 (gemini-2.0-flash was retired 1 Jun 2026)
+
+// Firestore collections (the Flutter app reads the same ones):
+//   assessments          { name, description, totalQuestions, createdAt }
+//   assessmentQuestions  { assessmentId, type: 'mcq' | 'text', text, options[] (mcq only), createdAt }
+// An assessment goes live for users once it has `totalQuestions` questions.
+const DEFAULT_TOTAL = 15;   // used for old assessments without totalQuestions
+const MAX_TOTAL = 50;
+const MIN_OPT = 2, MAX_OPT = 6;
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const byTime = (a,b) => (a.createdAt?.seconds ?? 9e9) - (b.createdAt?.seconds ?? 9e9);
+let tt;
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2600)}
+function openModal(title, html, onSave){
+  $('#mt').textContent = title; $('#mb').innerHTML = html; $('#modal').classList.add('open');
+  $('#ms').onclick = async () => { if (await onSave() !== false) closeModal(); };
+  $('#mc').onclick = closeModal;
+  const f = $('#mb input,#mb textarea'); if (f) f.focus();
+}
+function closeModal(){ $('#modal').classList.remove('open'); }
+$('#modal').addEventListener('mousedown', e => { if (e.target.id === 'modal') closeModal(); });
+$('#burger').onclick = () => $('#side').classList.toggle('open');
+$('#logout').onclick = e => { e.preventDefault(); sessionStorage.removeItem('adminOK'); location.replace('index.html'); };
+const watch = (col, cb) => onSnapshot(collection(db, col),
+  s => cb(s.docs.map(d => ({id:d.id, ...d.data()})).sort(byTime)),
+  e => toast('Firestore: ' + e.message));
+
+// ---------- Gemini question generator ----------
+// Asks Gemini for `need` new questions for the given assessment and returns
+// them as [{type, text, options}], validated and cleaned up. Throws on
+// network/parse errors so the caller can show a toast.
+async function generateQuestionsWithAI(assessment, need, notes) {
+  if (!GEMINI_API_KEY || GEMINI_API_KEY.includes('YOUR_')) {
+    throw new Error('Pehle script me GEMINI_API_KEY set karein (free key: aistudio.google.com/apikey)');
+  }
+  const prompt = `You are creating questions for a health/wellness self-assessment survey named "${assessment.name}".
+Description: ${assessment.description || 'N/A'}
+${notes ? `Extra guidance from the admin: ${notes}` : ''}
+
+Generate exactly ${need} NEW assessment questions for this survey (do not repeat generic filler). Prefer "mcq" type; use "text" (free-write) for at most 1 in 5 questions.
+For "mcq" questions: give 3 to 5 answer options ordered from the BEST/healthiest answer first to the WORST/least healthy answer last — this order is used for scoring, so it must be correct.
+For "text" questions: omit options; the user will type a free-text answer.
+
+Return ONLY a raw JSON array (no markdown, no commentary) in exactly this shape:
+[{"type":"mcq","text":"question text","options":["best option","middle option","worst option"]},{"type":"text","text":"question text"}]`;
+
+  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents: [{ parts: [{ text: prompt }] }],
+      generationConfig: { responseMimeType: 'application/json', temperature: 0.8 }
+    })
+  });
+  if (!res.ok) {
+    const t = await res.text().catch(() => '');
+    throw new Error(`Gemini error ${res.status}: ${t.slice(0,150) || 'request failed'}`);
+  }
+  const data = await res.json();
+  const raw = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!raw) throw new Error('AI se khaali response mila, dobara try karein');
+  let parsed;
+  try { parsed = JSON.parse(raw); } catch { throw new Error('AI ne invalid JSON diya, dobara try karein'); }
+  if (!Array.isArray(parsed)) throw new Error('AI response ek list nahi thi');
+  return parsed
+    .map(q => ({
+      type: q.type === 'text' ? 'text' : 'mcq',
+      text: String(q.text || '').trim(),
+      options: q.type === 'text' ? [] : (Array.isArray(q.options) ? q.options.map(o => String(o).trim()).filter(Boolean) : [])
+    }))
+    .filter(q => q.text && (q.type === 'text' || (q.options.length >= MIN_OPT && q.options.length <= MAX_OPT)));
+}
+
+let items = [], qs = [], sel = null;
+$('#page').innerHTML = `<div class="grid2">
+  <div class="card"><div class="ch"><b>Assessments</b><button class="btn" data-a="addA">+ New</button></div><div id="aList"></div></div>
+  <div class="card"><div class="ch"><b id="qTitle">Questions</b><button class="btn" data-a="addQ" id="addQBtn">+ Add question</button></div><div id="info"></div><div id="qList"></div></div></div>`;
+watch('assessments', r => { items = r; if (!items.find(c => c.id === sel)) sel = items[0]?.id ?? null; render(); });
+watch('assessmentQuestions', r => { qs = r; render(); });
+
+const countOf = id => qs.filter(q => q.assessmentId === id).length;
+const totalOf = a => { const n = Number(a?.totalQuestions); return Number.isFinite(n) && n >= 1 ? Math.floor(n) : DEFAULT_TOTAL; };
+
+function render(){
+  const al = $('#aList'), ql = $('#qList'), info = $('#info');
+  al.innerHTML = items.length ? items.map(a => { const n = countOf(a.id), t = totalOf(a); return `
+    <div class="cat ${a.id === sel ? 'sel' : ''}" data-a="selA" data-id="${a.id}">
+      <span class="n">${esc(a.name)}</span><span class="badge ${n === t ? 'ok' : ''}">${n}/${t}</span>
+      <button class="ic" title="Edit" data-a="editA" data-id="${a.id}">✎</button>
+      <button class="ic del" title="Delete" data-a="delA" data-id="${a.id}">🗑</button></div>`; }).join('')
+    : `<div class="empty">No assessments yet.<br>Click “+ New” to create one.</div>`;
+  const cur = items.find(c => c.id === sel);
+  $('#qTitle').textContent = cur ? `Questions — ${cur.name}` : 'Questions';
+  const btn = $('#addQBtn');
+  btn.style.display = cur ? '' : 'none';
+  if (!cur) { info.innerHTML = ''; ql.innerHTML = `<div class="empty">Select or create an assessment first.</div>`; return; }
+  const list = qs.filter(q => q.assessmentId === cur.id);
+  const total = totalOf(cur), full = list.length >= total, need = total - list.length;
+  btn.disabled = full; btn.textContent = full ? `Limit reached (${total})` : `+ Add question (${list.length}/${total})`;
+  info.innerHTML = `<div class="info">${cur.description ? `<p>${esc(cur.description)}</p>` : '<p><i>No description.</i></p>'}
+    <span class="st ${full ? 'ok' : 'wait'}">${full ? 'Live for users' : `Hidden from users — add ${need} more question(s)`}</span>
+    ${!full ? `<button class="btn-ai" data-a="aiGen" style="margin-left:8px">✨ Generate ${need} with AI</button>` : ''}</div>`;
+  ql.innerHTML = list.length ? list.map((q,i) => {
+    const isText = q.type === 'text';
+    const opts = isText ? `<span class="chip">✍ User writes an explanation (not scored)</span>`
+      : (q.options || []).map((o,k,arr) => `<span class="chip"><i>${arr.length-1-k}pt</i>${esc(o)}</span>`).join('');
+    return `<div class="q"><div class="qh"><div class="qt">${i+1}. ${esc(q.text)}<span class="tag ${isText ? 'text' : 'mcq'}">${isText ? 'EXPLAIN' : 'MCQ'}</span>${q.aiGenerated ? '<span class="tag ai">AI</span>' : ''}</div>
+      <button class="ic" data-a="editQ" data-id="${q.id}">✎</button><button class="ic del" data-a="delQ" data-id="${q.id}">🗑</button></div>
+      <div class="opts">${opts}</div></div>`; }).join('')
+    : `<div class="empty">No questions yet.<br>Click “+ Add question” or generate with AI.</div>`;
+}
+
+// ---------- assessment modal ----------
+const aModal = a => openModal(a ? 'Edit assessment' : 'New assessment',
+  `<label>Assessment name</label><input id="aName" placeholder="e.g. Sleep, Stress, Activity" value="${esc(a?.name || '')}">
+   <label>Description</label><textarea id="aDesc" rows="4" placeholder="Short text users see before they start">${esc(a?.description || '')}</textarea>
+   <label>Number of questions (1–${MAX_TOTAL})</label>
+   <input id="aTotal" type="number" min="1" max="${MAX_TOTAL}" value="${a ? totalOf(a) : 10}">
+   <div class="qn">${[2,5,10,15,20].map(n => `<button type="button" class="btn-l btn-s" data-a="setN" data-n="${n}">${n}</button>`).join('')}</div>`,
+  async () => {
+    const name = $('#aName').value.trim(), description = $('#aDesc').value.trim();
+    const totalQuestions = parseInt($('#aTotal').value, 10);
+    if (!name) { toast('Enter a name'); return false; }
+    if (!Number.isInteger(totalQuestions) || totalQuestions < 1 || totalQuestions > MAX_TOTAL) { toast(`Questions must be between 1 and ${MAX_TOTAL}`); return false; }
+    if (a && totalQuestions < countOf(a.id)) { toast(`Already ${countOf(a.id)} questions exist. Delete some first.`); return false; }
+    try {
+      if (a) await updateDoc(doc(db,'assessments',a.id), { name, description, totalQuestions });
+      else { const r = await addDoc(collection(db,'assessments'), { name, description, totalQuestions, createdAt: serverTimestamp() }); sel = r.id; }
+      toast('Assessment saved');
+    } catch (e) { toast(e.message); return false; }
+  });
+
+// ---------- question modal ----------
+const qModal = q => {
+  const cur = items.find(c => c.id === sel); if (!cur) return;
+  if (!q && countOf(sel) >= totalOf(cur)) { toast(`Max ${totalOf(cur)} questions for this assessment`); return; }
+  const startOpts = q?.type !== 'text' && q?.options?.length ? [...q.options] : ['', '', '', ''];
+  openModal(q ? 'Edit question' : 'New question',
+    `<label>Question type</label>
+     <select id="qType"><option value="mcq">MCQ — user picks one option</option><option value="text">Explain — user writes an answer</option></select>
+     <label>Question</label><textarea id="qText" rows="3" placeholder="e.g. How many hours did you sleep last night?">${esc(q?.text || '')}</textarea>
+     <div id="optWrap"><label>Options — best answer first (highest points) to worst (0 pts)</label><div id="optList"></div>
+     <button type="button" class="btn-l btn-s" id="addOpt">+ Add option</button></div>
+     <div id="txtNote" style="display:none;font-size:12.5px;color:var(--grey);margin-top:10px">Users will type their own answer. It is saved with their result but not scored.</div>`,
+    async () => {
+      const type = $('#qType').value, text = $('#qText').value.trim();
+      if (!text) { toast('Enter the question'); return false; }
+      let options = [];
+      if (type === 'mcq') {
+        options = [...document.querySelectorAll('#optList .opt')].map(i => i.value.trim());
+        if (options.length < MIN_OPT || options.some(v => !v)) { toast(`Fill at least ${MIN_OPT} options (no empty ones)`); return false; }
+      }
+      try {
+        if (q) await updateDoc(doc(db,'assessmentQuestions',q.id), { type, text, options });
+        else {
+          if (countOf(sel) >= totalOf(cur)) { toast('Question limit reached'); return false; }
+          await addDoc(collection(db,'assessmentQuestions'), { assessmentId: sel, type, text, options, createdAt: serverTimestamp() });
+        }
+        toast('Question saved');
+      } catch (e) { toast(e.message); return false; }
+    });
+
+  const list = $('#optList'), typeSel = $('#qType');
+  const draw = vals => {
+    const n = vals.length;
+    list.innerHTML = vals.map((v,i) => `<div class="orow"><input class="opt" placeholder="Option ${i+1} (${n-1-i} pt)" value="${esc(v)}">
+      <button type="button" class="ic del" data-a="rmOpt" data-i="${i}" ${n <= MIN_OPT ? 'disabled' : ''}>✕</button></div>`).join('');
+    $('#addOpt').disabled = n >= MAX_OPT;
+  };
+  const vals = () => [...list.querySelectorAll('.opt')].map(i => i.value);
+  const toggle = () => { const m = typeSel.value === 'mcq'; $('#optWrap').style.display = m ? '' : 'none'; $('#txtNote').style.display = m ? 'none' : ''; };
+  typeSel.value = q?.type === 'text' ? 'text' : 'mcq';
+  typeSel.onchange = toggle;
+  $('#addOpt').onclick = () => draw([...vals(), '']);
+  list.onclick = e => { const b = e.target.closest('[data-a="rmOpt"]'); if (!b) return; e.stopPropagation(); const v = vals(); v.splice(+b.dataset.i, 1); draw(v); };
+  draw(startOpts); toggle();
+};
+
+// ---------- AI generate modal ----------
+const aiModal = (cur, need) => openModal(`Generate ${need} question(s) with AI`,
+  `<p style="font-size:13px;color:var(--grey);margin:0 0 4px">Gemini "${cur.name}" ke liye ${need} naye question banayega, best→worst order me MCQ options ke saath.</p>
+   <label>Extra guidance (optional)</label>
+   <textarea id="aiNotes" rows="3" placeholder="e.g. Focus on sleep quality, keep language simple, avoid medical jargon..."></textarea>`,
+  async () => {
+    const btn = $('#ms'); const oldLabel = btn.textContent;
+    btn.disabled = true; btn.textContent = 'Generating…';
+    try {
+      const notes = $('#aiNotes').value.trim();
+      const generated = await generateQuestionsWithAI(cur, need, notes);
+      if (!generated.length) { toast('AI ne koi valid question nahi diya, dobara try karein'); return false; }
+      const toAdd = generated.slice(0, need);
+      const b = writeBatch(db);
+      toAdd.forEach(q => {
+        const ref = doc(collection(db, 'assessmentQuestions'));
+        b.set(ref, { assessmentId: cur.id, type: q.type, text: q.text, options: q.options, aiGenerated: true, createdAt: serverTimestamp() });
+      });
+      await b.commit();
+      toast(`✨ ${toAdd.length} question(s) added by AI`);
+    } catch (err) {
+      toast(err.message);
+      return false;
+    } finally {
+      btn.disabled = false; btn.textContent = oldLabel;
+    }
+  });
+
+document.addEventListener('click', async e => {
+  const el = e.target.closest('[data-a]'); if (!el) return;
+  const a = el.dataset.a, id = el.dataset.id;
+  if (a === 'selA') { sel = id; render(); }
+  else if (a === 'addA') aModal();
+  else if (a === 'setN') { $('#aTotal').value = el.dataset.n; }
+  else if (a === 'editA') { e.stopPropagation(); aModal(items.find(c => c.id === id)); }
+  else if (a === 'addQ') qModal();
+  else if (a === 'editQ') qModal(qs.find(q => q.id === id));
+  else if (a === 'aiGen') {
+    const cur = items.find(c => c.id === sel); if (!cur) return;
+    const need = totalOf(cur) - countOf(cur.id);
+    if (need <= 0) return;
+    aiModal(cur, need);
+  }
+  else if (a === 'delQ') {
+    if (!confirm('Delete this question?')) return;
+    try { await deleteDoc(doc(db,'assessmentQuestions',id)); toast('Question deleted'); } catch (err) { toast(err.message); }
+  } else if (a === 'delA') {
+    e.stopPropagation();
+    const qq = qs.filter(q => q.assessmentId === id);
+    if (!confirm(`Delete this assessment${qq.length ? ` and its ${qq.length} question(s)` : ''}?`)) return;
+    try {
+      const b = writeBatch(db);
+      qq.forEach(q => b.delete(doc(db,'assessmentQuestions',q.id)));
+      b.delete(doc(db,'assessments',id));
+      await b.commit(); toast('Assessment deleted');
+    } catch (err) { toast(err.message); }
+  }
+});
+</script>
+</body>
+</html>
